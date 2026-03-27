@@ -1,0 +1,3 @@
+docs/bios-checklist.md
+
+Hamarosan...
