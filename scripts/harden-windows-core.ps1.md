@@ -9,3 +9,17 @@ Részletes logolást fájlba
 
 A script teljesen biztonságos kezdőknek is: először Audit módban tesztelheted, utána Block-ra kapcsolhatod.
 
+
+----------------------------
+Hogyan használod?
+----------------------------
+
+Mentés: harden-windows-core.ps1 néven a /scripts/ mappába.
+
+- Első teszt:PowerShell.\harden-windows-core.ps1 -Mode Audit
+
+- Éles használat:PowerShell.\harden-windows-core.ps1 -Mode Block
+
+- VBS nélkül (ha lassabb lenne a gép):PowerShell.\harden-windows-core.ps1 -Mode Block -EnableVBS $false
+
+A script teljesen dokumentált, logol, és biztonságosan használja az Add-MpPreference parancsot (nem írja felül a korábbi szabályokat).
