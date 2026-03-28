@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+; USB tárolóeszközök (pendrive, külső HDD stb.) letiltása
+; Billentyűzet, egér és egyéb HID eszközök továbbra is működnek
+; Forrás: Microsoft Answers + általános gyakorlat
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR]
+"Start"=dword:00000004
