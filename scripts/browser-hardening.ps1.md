@@ -8,3 +8,6 @@ Ez a script nem telepít bővítményeket (az manuális vagy GPO-s feladat), de:
 - Beállít néhány biztonsági beállítást Edge és Chrome esetén (pl. tracking védelem, script blokkolás irányelvek)
 - Exportál egy egyszerű „hardening checklist”-et
 
+
+
+Frissített browser-hardening.ps1 (most már Edge + Brave támogatással)
