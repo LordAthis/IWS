@@ -1,1 +1,6 @@
+Windows Registry Editor Version 5.00
 
+; USB tárolóeszközök visszaengedélyezése
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR]
+"Start"=dword:00000003
