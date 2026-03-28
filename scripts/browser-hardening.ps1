@@ -1,11 +1,7 @@
 <#
 .SYNOPSIS
-    Böngésző hardening script – uBlock Origin + alapvető biztonsági beállítások
-    Altsito videó alapján (NoScript-szerű védelmek)
-
-.DESCRIPTION
-    Javaslatok és részleges automatikus beállítások Edge/Chrome böngészőkhöz.
-    Teljes uBlock konfigurációhoz lásd a GitHub docs mappát.
+    Böngésző megerősítés – Microsoft Edge + Brave támogatással
+    Altsito videó + Microsoft/Brave ajánlások alapján
 #>
 
 param([switch]$WhatIf)
@@ -18,26 +14,53 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 $LogFile = "$env:USERPROFILE\Desktop\Browser-Hardening-Log_$(Get-Date -Format 'yyyyMMdd-HHmm').txt"
 "Browser Hardening Script – $(Get-Date)" | Out-File $LogFile -Append
 
-Write-Host "🌐 Böngésző megerősítés indul..." -ForegroundColor Cyan
+Write-Host "🌐 Böngésző megerősítés indul (Edge + Brave)..." -ForegroundColor Cyan
 
-# uBlock Origin ajánlása
-Write-Host "`n📌 Ajánlott bővítmények telepítése:" -ForegroundColor Green
-Write-Host "   • uBlock Origin (Edge / Chrome / Firefox)" -ForegroundColor White
-Write-Host "   • Bitwarden" -ForegroundColor White
+# === Microsoft Edge Hardening ===
+Write-Host "`n🔒 Microsoft Edge megerősítése..." -ForegroundColor Green
 
-if (-not $WhatIf) {
-    # Edge tracking védelem erősítése (példa registry)
-    $EdgePath = "HKCU:\Software\Policies\Microsoft\Edge"
-    if (-not (Test-Path $EdgePath)) { New-Item -Path $EdgePath -Force | Out-Null }
-    Set-ItemProperty -Path $EdgePath -Name "TrackingPrevention" -Value 3 -Type DWord   # 3 = Strict
-    "Edge: TrackingPrevention = Strict" | Out-File $LogFile -Append
-    Write-Host "   ✅ Edge tracking védelem: Strict mód" -ForegroundColor Green
+$EdgePolicyPath = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"
+
+if (-not (Test-Path $EdgePolicyPath)) {
+    New-Item -Path $EdgePolicyPath -Force | Out-Null
 }
 
-Write-Host "`n⚠️  Manuális lépések javasoltak:" -ForegroundColor Yellow
-Write-Host "   1. Telepítsd az uBlock Origin-t minden böngészőbe"
-Write-Host "   2. Engedélyezd a 'Medium' vagy 'High' módot az uBlock-ban"
-Write-Host "   3. Használj standard felhasználói fiókot (least privilege)"
+if (-not $WhatIf) {
+    # Strict Tracking Prevention (3 = Strict)
+    Set-ItemProperty -Path $EdgePolicyPath -Name "TrackingPrevention" -Value 3 -Type DWord -Force
+    # SmartScreen bekapcsolása
+    Set-ItemProperty -Path $EdgePolicyPath -Name "SmartScreenEnabled" -Value 1 -Type DWord -Force
+    # WebRTC IP leaking blokkolása
+    Set-ItemProperty -Path $EdgePolicyPath -Name "WebRtcLocalhostIpHandling" -Value 1 -Type DWord -Force
 
-Write-Host "`n🎉 Browser hardening kész! Log: $LogFile" -ForegroundColor Cyan
+    Write-Host "   ✅ Edge: Strict Tracking Prevention, SmartScreen, WebRTC védelem" -ForegroundColor Green
+    "Edge: TrackingPrevention=3, SmartScreen=1, WebRtcLocalhostIpHandling=1" | Out-File $LogFile -Append
+} else {
+    Write-Host "   [WhatIf] Edge registry beállítások" -ForegroundColor Gray
+}
+
+# === Brave ajánlás ===
+Write-Host "`n🛡️  Brave böngésző ajánlása (jobb alapvédelem)..." -ForegroundColor Magenta
+Write-Host "   • Töltsd le hivatalos oldalról: https://brave.com" -ForegroundColor White
+Write-Host "   • Ajánlott beállítások: Shields = Aggressive, Fingerprinting = Strict" -ForegroundColor White
+Write-Host "   • Extra: Telemetry kikapcsolása, Wallet/VPN letiltása (flags vagy policies)" -ForegroundColor White
+
+# Brave specifikus registry példa (opcionális)
+$BravePolicyPath = "HKLM:\SOFTWARE\Policies\BraveSoftware\Brave"
+if (-not $WhatIf) {
+    if (-not (Test-Path $BravePolicyPath)) { New-Item -Path $BravePolicyPath -Force | Out-Null }
+    # Példa: Rewards és Wallet letiltása a támadási felület csökkentéséhez
+    Set-ItemProperty -Path $BravePolicyPath -Name "BraveRewardsDisabled" -Value 1 -Type DWord -Force
+    Set-ItemProperty -Path $BravePolicyPath -Name "BraveWalletDisabled" -Value 1 -Type DWord -Force
+    Write-Host "   ✅ Brave: Rewards és Wallet letiltva (opcionális)" -ForegroundColor Green
+}
+
+Write-Host "`n📌 Közös ajánlás mindkét böngészőhöz:" -ForegroundColor Yellow
+Write-Host "   • Telepítsd az uBlock Origin-t (Extra szűrőlistákkal)" -ForegroundColor White
+Write-Host "   • Használj standard felhasználói fiókot (least privilege)" -ForegroundColor White
+Write-Host "   • Bitwarden + hardveres 2FA" -ForegroundColor White
+
+Write-Host "`n🎉 Böngésző hardening kész! Log: $LogFile" -ForegroundColor Cyan
+Write-Host "   Edge-et mindig frissítsd, Brave-ot pedig preferáld ahol lehet." -ForegroundColor White
+
 pause
