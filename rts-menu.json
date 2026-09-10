@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "categories": [
+    {
+      "name": "Biztonsag",
+      "items": [
+        {
+          "id": "core-hardening",
+          "name": "Core Hardening",
+          "description": "Windows alap biztonsagi beallitasainak megerositese.",
+          "type": "script",
+          "path": "scripts\\harden-windows-core.ps1",
+          "os": ["7", "8", "10", "11"]
+        },
+        {
+          "id": "quad9-doh",
+          "name": "Quad9 + DoH",
+          "description": "Quad9 DNS beallitasa DNS-over-HTTPS-szel.",
+          "type": "script",
+          "path": "scripts\\set-quad9-doh.ps1",
+          "os": ["10", "11"]
+        },
+        {
+          "id": "usb-restriction",
+          "name": "USB blokkolas",
+          "description": "USB tarolo eszkozok hasznalatanak korlatozasa.",
+          "type": "script",
+          "path": "scripts\\usb-restriction.ps1",
+          "os": ["7", "8", "10", "11"]
+        },
+        {
+          "id": "browser-hardening",
+          "name": "Bongeszo megerositese",
+          "description": "Bongeszo biztonsagi beallitasainak megerositese.",
+          "type": "script",
+          "path": "scripts\\browser-hardening.ps1",
+          "os": ["7", "8", "10", "11"]
+        },
+        {
+          "id": "check-autoruns",
+          "name": "Autoruns ellenorzes",
+          "description": "Rendszerindulaskor futo elemek atvizsgalasa.",
+          "type": "script",
+          "path": "scripts\\check-autoruns.ps1",
+          "os": ["7", "8", "10", "11"]
+        }
+      ]
+    },
+    {
+      "name": "Telepites",
+      "items": [
+        {
+          "id": "install-hardening",
+          "name": "Teljes telepites",
+          "description": "Az osszes fenti IWS-beallitas egyben, sorban vegrehajtva.",
+          "type": "script",
+          "path": "scripts\\install-hardening.ps1",
+          "os": ["7", "8", "10", "11"],
+          "requires_console": true
+        }
+      ]
+    }
+  ]
+}
