@@ -26,7 +26,13 @@
           "description": "USB tarolo eszkozok hasznalatanak korlatozasa.",
           "type": "script",
           "path": "scripts\\usb-restriction.ps1",
-          "os": ["7", "8", "10", "11"]
+          "os": ["7", "8", "10", "11"],
+          "already_done": {
+            "type": "registry",
+            "path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR",
+            "name": "Start",
+            "expected_value": "4"
+          }
         },
         {
           "id": "browser-hardening",
